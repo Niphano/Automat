@@ -34,44 +34,77 @@ class JSON(): #dans la vi il faut commenter surtout si on est en groupes
 
 #def afficher_automate():
 
-#def successors(dfa, state):
-#   if state not in dfa.states:
-#       print("error : le state specifié '" + state + "' ne fait pas partie de l'automate.")
-#       return
-#
-#   ret = []
-#   for (symbol, dst_state) in dfa.transitions[state]:
-#       if dst_state not in ret:
-#           ret.append(dst_state)
-#
-#   return ret
+def successors(dfa, state):
+   if state not in dfa.states:
+       print("error : le state specifié '" + state + "' ne fait pas partie de l'automate.")
+       return
 
-#def list_accessible(dfa):
-#   visited = []
-#   to_visit = [dfa.init]
-#
-#   while len(to_visit) > 0:
-#       state = to_visit.pop()
-#       visited.append(state)
-#       for succ in successors(dfa, state):
-#           if succ not in visited and succ not in to_visit:
-#               to_visit.append(succ)
-#
-#   return visited
+   ret = []
+   for (symbol, dst_state) in dfa.transitions[state]:
+       if dst_state not in ret:
+           ret.append(dst_state)
 
-#def accessible(dfa, state):
-#   if state not in dfa.states:
-#       print("error : state '" + state + "' ne fait pas partie de l'automate.")
-#       return False
-#
-#   return state in list_accessible(dfa)
+   return ret
 
-#def accessible(dfa):
-#   return len(dfa.states) == len(list_accessible(dfa))
+def list_accessible(dfa):
+   visited = []
+   to_visit = [dfa.init]
+
+   while len(to_visit) > 0:
+       state = to_visit.pop()
+       visited.append(state)
+       for succ in successors(dfa, state):
+           if succ not in visited and succ not in to_visit:
+               to_visit.append(succ)
+
+   return visited
+
+def accessible(dfa, state):
+   if state not in dfa.states:
+       print("error : state '" + state + "' ne fait pas partie de l'automate.")
+       return False
+
+   return state in list_accessible(dfa)
+
+def accessible(dfa):
+   return len(dfa.states) == len(list_accessible(dfa))
+    
+def predecessors(dfa, state):
+    if state not in dfa.states:
+        print("error : le state specifié '" + state + "' ne fait pas partie de l'automate.")
+        return
+ 
+    ret = []
+    for src_state in dfa.states:
+        for (symbol, dst_state) in dfa.transitions[src_state]:
+            if dst_state == state and src_state not in ret:
+                ret.append(src_state)
+ 
+    return ret
     
 
-#def list_co-accessible(dfa):
-#   
+def list_coaccessible(dfa):
+    visited = []
+    to_visit = dfa.finals.copy()
+ 
+    while len(to_visit) > 0:
+        state = to_visit.pop()
+        visited.append(state)
+        for pred in predecessors(dfa, state):
+            if pred not in visited and pred not in to_visit:
+                to_visit.append(pred)
+ 
+    return visited
+
+def coaccessible(dfa, state):
+    if state not in dfa.states:
+        print("error : the state '" + state + "' ne fait pas partie de l'automate.")
+        return
+ 
+    return state in list_coaccessible(dfa)
+
+def coaccessible(dfa):
+    return len(dfa.states) == len(list_coaccessible(dfa))
 #
 #
 #
